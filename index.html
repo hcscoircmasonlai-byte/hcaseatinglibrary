@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seating Library Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            color: #4a5568;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .equipment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .equipment-image {
+            width: 100%;
+            height: 150px;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        .equipment-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .equipment-info h3 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .equipment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-available {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-borrowed {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .equipment-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload {
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .borrowed-info {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .borrowed-info h4 {
+            color: #742a2a;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-panel {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-filters {
+                flex-direction: column;
+            }
+
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>🪑 Seating Library System</h1>
+                <span style="color: #718096;">Hong Chi Shui Chuen O Complex</span>
+            </div>
+            <div class="user-controls">
+                <span id="currentUser">OT Staff</span>
+                <button class="btn btn-secondary" onclick="toggleAdminMode()">
+                    <span id="adminToggleText">Admin Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('catalog')">Equipment Catalog</div>
+            <div class="tab" onclick="switchTab('borrowed')">Borrowed Items</div>
+            <div class="tab" onclick="switchTab('reports')">Reports & Stats</div>
+        </div>
+
+        <!-- Catalog Tab -->
+        <div id="catalog-tab" class="tab-content active">
+            <div class="search-filters">
+                <input type="text" class="search-input" placeholder="Search equipment..." id="searchInput" oninput="filterEquipment()">
+                <select class="filter-select" id="categoryFilter" onchange="filterEquipment()">
+                    <option value="">All Categories</option>
+                    <option value="wheelchairs">Wheelchairs</option>
+                    <option value="stablio">Stablio System</option>
+                    <option value="terra">Terra System</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="consumables">Consumables</option>
+                </select>
+                <select class="filter-select" id="statusFilter" onchange="filterEquipment()">
+                    <option value="">All Status</option>
+                    <option value="available">Available</option>
+                    <option value="borrowed">Borrowed</option>
+                </select>
+                <button class="btn btn-primary admin-only" onclick="showAddEquipmentModal()" style="display: none;">
+                    ➕ Add Equipment
+                </button>
+            </div>
+
+            <div class="equipment-grid" id="equipmentGrid">
+                <!-- Equipment cards will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Borrowed Items Tab -->
+        <div id="borrowed-tab" class="tab-content">
+            <h2 style="margin-bottom: 2rem;">Currently Borrowed Items</h2>
+            <div id="borrowedItemsList">
+                <!-- Borrowed items will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content">
+            <div class="admin-panel">
+                <h2 style="margin-bottom: 1rem;">📊 System Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalItems">103</div>
+                        <div class="stat-label">Total Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="availableItems">85</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="borrowedItems">18</div>
+                        <div class="stat-label">Borrowed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalBorrows">47</div>
+                        <div class="stat-label">Total Borrows</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Detail Modal -->
+    <div id="equipmentModal" class="modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 id="modalTitle">Equipment Details</h2>
+                <button class="btn btn-secondary" onclick="closeModal('equipmentModal')">✕</button>
+            </div>
+            <div id="modalContent">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Equipment Modal -->
+    <div id="addEquipmentModal" class="modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 id="addModalTitle">Add New Equipment</h2>
+                <button class="btn btn-secondary" onclick="closeModal('addEquipmentModal')">✕</button>
+            </div>
+            <form id="equipmentForm">
+                <div class="form-group">
+                    <label for="equipmentName">Equipment Name *</label>
+                    <input type="text" id="equipmentName" required>
+                </div>
+                <div class="form-group">
+                    <label for="equipmentCategory">Category *</label>
+                    <select id="equipmentCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="wheelchairs">Wheelchairs</option>
+                        <option value="stablio">Stablio System</option>
+                        <option value="terra">Terra System</option>
+                        <option value="accessories">Wheelchair Accessories</option>
+                        <option value="consumables">Consumables</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="equipmentSupplier">Supplier *</label>
+                    <input type="text" id="equipmentSupplier" required>
+                </div>
+                <div class="form-group">
+                    <label for="equipmentQuantity">Total Quantity *</label>
+                    <input type="number" id="equipmentQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="equipmentDescription">Description</label>
+                    <textarea id="equipmentDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Equipment Image</label>
+                    <div class="file-upload" onclick="document.getElementById('imageUpload').click()">
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                        <div id="uploadText">📷 Click to upload image</div>
+                        <div id="imagePreview" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addEquipmentModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Equipment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Borrow Modal -->
+    <div id="borrowModal" class="modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Borrow Equipment</h2>
+                <button class="btn btn-secondary" onclick="closeModal('borrowModal')">✕</button>
+            </div>
+            <form id="borrowForm">
+                <div class="form-group">
+                    <label for="borrowerName">Staff Name *</label>
+                    <input type="text" id="borrowerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="borrowerUnit">Unit/Department *</label>
+                    <select id="borrowerUnit" required>
+                        <option value="">Select Unit</option>
+                        <option value="OT Department">OT Department</option>
+                        <option value="PT Department">PT Department</option>
+                        <option value="Hostel A">Hostel A</option>
+                        <option value="Hostel B">Hostel B</option>
+                        <option value="Day Service Center">Day Service Center</option>
+                        <option value="Training Center">Training Center</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="borrowNotes">Notes (Optional)</label>
+                    <textarea id="borrowNotes" rows="2" placeholder="Any special notes or requirements..."></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('borrowModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Borrow</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isAdminMode = false;
+        let currentEquipmentId = null;
+        let equipmentData = [];
+
+        // Initialize the system
+        window.onload = function() {
+            initializeEquipmentData();
+            renderEquipment();
+            updateStats();
+        };
+
+        // Sample equipment data based on the catalog
+        function initializeEquipmentData() {
+            equipmentData = [
+                {
+                    id: 1,
+                    name: "Ki Mobility Catalyst 4C Wheelchair",
+                    category: "wheelchairs",
+                    supplier: "SAHK",
+                    totalQuantity: 1,
+                    availableQuantity: 0,
+                    description: "Advanced manual wheelchair with customizable features",
+                    image: null,
+                    borrowedBy: [
+                        { staffName: "Mr. Kwan", unit: "Hostel A", borrowDate: "2023-08-08", notes: "For mobility assistance" }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Base Hilo M+",
+                    category: "stablio",
+                    supplier: "SAHK",
+                    totalQuantity: 2,
+                    availableQuantity: 1,
+                    description: "Adjustable seating base with multiple positioning options",
+                    image: null,
+                    borrowedBy: [
+                        { staffName: "Ms. Chan", unit: "OT Department", borrowDate: "2024-06-12", notes: "Assessment purposes" }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "CONFORTABLE PLUS DUO L",
+                    category: "stablio",
+                    supplier: "SAHK",
+                    totalQuantity: 1,
+                    availableQuantity: 0,
+                    description: "Large comfort seating cushion with dual support",
+                    image: null,
+                    borrowedBy: [
+                        { staffName: "Ms. Tse", unit: "Hostel B", borrowDate: "2023-09-13", notes: "Multiple system atrophy support" }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "E-Z on Lateral Support (with Nylon)",
+                    category: "accessories",
+                    supplier: "Justice Medical",
+                    totalQuantity: 2,
+                    availableQuantity: 1,
+                    description: "Lateral support system with nylon construction",
+                    image: null,
+                    borrowedBy: [
+                        { staffName: "Ms. Cheung", unit: "Day Service Center", borrowDate: "2023-11-02", notes: "Multiple sclerosis support" }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Wedge M",
+                    category: "stablio",
+                    supplier: "SAHK",
+                    totalQuantity: 2,
+                    availableQuantity: 1,
+                    description: "Medium-sized positioning wedge",
+                    image: null,
+                    borrowedBy: [
+                        { staffName: "Mr. Fan", unit: "Training Center", borrowDate: "2024-08-28", notes: "Cerebral palsy positioning" }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "URIAS Air Splint, Half Arm 53cm",
+                    category: "consumables",
+                    supplier: "Efficiency Medical",
+                    totalQuantity: 2,
+                    availableQuantity: 2,
+                    description: "Air splint for arm support and positioning",
+                    image: null,
+                    borrowedBy: []
+                }
+            ];
+        }
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Load specific content
+            if (tabName === 'borrowed') {
+                renderBorrowedItems();
+            } else if (tabName === 'reports') {
+                updateStats();
+            }
+        }
+
+        // Toggle admin mode
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
+            const adminElements = document.querySelectorAll('.admin-only');
+            const toggleText = document.getElementById('adminToggleText');
+            
+            if (isAdminMode) {
+                adminElements.forEach(el => el.style.display = 'block');
+                toggleText.textContent = 'Exit Admin';
+                document.getElementById('currentUser').textContent = 'Admin User';
+            } else {
+                adminElements.forEach(el => el.style.display = 'none');
+                toggleText.textContent = 'Admin Mode';
+                document.getElementById('currentUser').textContent = 'OT Staff';
+            }
+        }
+
+        // Filter equipment
+        function filterEquipment() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const filteredData = equipmentData.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
+                                    item.supplier.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || item.category === categoryFilter;
+                const matchesStatus = !statusFilter || 
+                                    (statusFilter === 'available' && item.availableQuantity > 0) ||
+                                    (statusFilter === 'borrowed' && item.borrowedBy.length > 0);
+                
+                return matchesSearch && matchesCategory && matchesStatus;
+            });
+            
+            renderEquipment(filteredData);
+        }
+
+        // Render equipment grid
+        function renderEquipment(data = equipmentData) {
+            const grid = document.getElementById('equipmentGrid');
+            grid.innerHTML = '';
+            
+            data.forEach(item => {
+                const card = createEquipmentCard(item);
+                grid.appendChild(card);
+            });
+        }
+
+        // Create equipment card
+        function createEquipmentCard(item) {
+            const card = document.createElement('div');
+            card.className = 'equipment-card';
+            
+            const isAvailable = item.availableQuantity > 0;
+            const statusClass = isAvailable ? 'status-available' : 'status-borrowed';
+            const statusText = isAvailable ? `${item.availableQuantity} Available` : 'All Borrowed';
+            
+            card.innerHTML = `
+                <div class="equipment-image">
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}">` : '📷 No Image'}
+                </div>
+                <div class="equipment-info">
+                    <h3>${item.name}</h3>
+                    <div class="equipment-details">
+                        <div><strong>Supplier:</strong> ${item.supplier}</div>
+                        <div><strong>Category:</strong> ${item.category}</div>
+                        <div><strong>Total Quantity:</strong> ${item.totalQuantity}</div>
+                    </div>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                    <div class="equipment-actions">
+                        <button class="btn btn-secondary btn-small" onclick="viewEquipmentDetails(${item.id})">
+                            👁️ View Details
+                        </button>
+                        ${isAvailable ? `
+                            <button class="btn btn-primary btn-small" onclick="borrowEquipment(${item.id})">
+                                📋 Borrow
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-secondary btn-small admin-only" onclick="editEquipment(${item.id})" style="${isAdminMode ? '' : 'display: none;'}">
+                            ✏️ Edit
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // View equipment details
+        function viewEquipmentDetails(id) {
+            const item = equipmentData.find(eq => eq.id === id);
+            if (!item) return;
+            
+            const isAvailable = item.availableQuantity > 0;
+            const borrowedInfo = item.borrowedBy.length > 0 ? `
+                <div class="borrowed-info">
+                    <h4>Currently Borrowed By:</h4>
+                    ${item.borrowedBy.map(borrow => `
+                        <div style="margin-bottom: 0.5rem;">
+                            <strong>${borrow.staffName}</strong> (${borrow.unit})<br>
+                            <small>Borrowed: ${borrow.borrowDate}</small><br>
+                            ${borrow.notes ? `<small>Notes: ${borrow.notes}</small>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            ` : '';
+            
+            document.getElementById('modalTitle').textContent = item.name;
+            document.getElementById('modalContent').innerHTML = `
+                <div class="equipment-image" style="height: 200px; margin-bottom: 1rem;">
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}">` : '📷 No Image Available'}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Supplier:</strong> ${item.supplier}<br>
+                    <strong>Category:</strong> ${item.category}<br>
+                    <strong>Total Quantity:</strong> ${item.totalQuantity}<br>
+                    <strong>Available:</strong> ${item.availableQuantity}<br>
+                    <strong>Status:</strong> <span class="status-badge ${isAvailable ? 'status-available' : 'status-borrowed'}">${isAvailable ? 'Available' : 'All Borrowed'}</span>
+                </div>
+                ${item.description ? `<div style="margin-bottom: 1rem;"><strong>Description:</strong><br>${item.description}</div>` : ''}
+                ${borrowedInfo}
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    ${isAvailable ? `<button class="btn btn-primary" onclick="closeModal('equipmentModal'); borrowEquipment(${item.id})">📋 Borrow This Item</button>` : ''}
+                    ${isAdminMode ? `<button class="btn btn-secondary" onclick="closeModal('equipmentModal'); editEquipment(${item.id})">✏️ Edit</button>` : ''}
+                </div>
+            `;
+            
+            showModal('equipmentModal');
+        }
+
+        // Borrow equipment
+        function borrowEquipment(id) {
+            currentEquipmentId = id;
+            const item = equipmentData.find(eq => eq.id === id);
+            if (!item || item.availableQuantity === 0) {
+                alert('This equipment is not available for borrowing.');
+                return;
+            }
+            
+            document.getElementById('borrowForm').reset();
+            showModal('borrowModal');
+        }
+
+        // Handle borrow form submission
+        document.getElementById('borrowForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const staffName = document.getElementById('borrowerName').value;
+            const unit = document.getElementById('borrowerUnit').value;
+            const notes = document.getElementById('borrowNotes').value;
+            
+            const item = equipmentData.find(eq => eq.id === currentEquipmentId);
+            if (item) {
+                // Add borrow record
+                item.borrowedBy.push({
+                    staffName: staffName,
+                    unit: unit,
+                    borrowDate: new Date().toISOString().split('T')[0],
+                    notes: notes
+                });
+                
+                // Decrease available quantity
+                item.availableQuantity--;
+                
+                // Refresh display
+                renderEquipment();
+                updateStats();
+                closeModal('borrowModal');
+                
+                alert(`Equipment "${item.name}" has been borrowed by ${staffName}.`);
+            }
+        });
+
+        // Return equipment
+        function returnEquipment(equipmentId, borrowIndex) {
+            const item = equipmentData.find(eq => eq.id === equipmentId);
+            if (item) {
+                // Remove borrow record
+                const returnedItem = item.borrowedBy.splice(borrowIndex, 1)[0];
+                
+                // Increase available quantity
+                item.availableQuantity++;
+                
+                // Refresh displays
+                renderEquipment();
+                renderBorrowedItems();
+                updateStats();
+                
+                alert(`Equipment "${item.name}" has been returned by ${returnedItem.staffName}.`);
+            }
+        }
+
+        // Show add equipment modal
+        function showAddEquipmentModal() {
+            document.getElementById('addModalTitle').textContent = 'Add New Equipment';
+            document.getElementById('equipmentForm').reset();
+            document.getElementById('uploadText').textContent = '📷 Click to upload image';
+            document.getElementById('imagePreview').innerHTML = '';
+            currentEquipmentId = null;
+            showModal('addEquipmentModal');
+        }
+
+        // Edit equipment
+        function editEquipment(id) {
+            const item = equipmentData.find(eq => eq.id === id);
+            if (!item) return;
+            
+            document.getElementById('addModalTitle').textContent = 'Edit Equipment';
+            document.getElementById('equipmentName').value = item.name;
+            document.getElementById('equipmentCategory').value = item.category;
+            document.getElementById('equipmentSupplier').value = item.supplier;
+            document.getElementById('equipmentQuantity').value = item.totalQuantity;
+            document.getElementById('equipmentDescription').value = item.description || '';
+            
+            if (item.image) {
+                document.getElementById('uploadText').textContent = 'Current image uploaded';
+                document.getElementById('imagePreview').innerHTML = `<img src="${item.image}" style="max-width: 100px; border-radius: 4px;">`;
+            }
+            
+            currentEquipmentId = id;
+            showModal('addEquipmentModal');
+        }
+
+        // Handle equipment form submission
+        document.getElementById('equipmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('equipmentName').value,
+                category: document.getElementById('equipmentCategory').value,
+                supplier: document.getElementById('equipmentSupplier').value,
+                totalQuantity: parseInt(document.getElementById('equipmentQuantity').value),
+                description: document.getElementById('equipmentDescription').value
+            };
+            
+            if (currentEquipmentId) {
+                // Edit existing equipment
+                const item = equipmentData.find(eq => eq.id === currentEquipmentId);
+                if (item) {
+                    Object.assign(item, formData);
+                    // Adjust available quantity if total quantity changed
+                    const borrowedCount = item.borrowedBy.length;
+                    item.availableQuantity = Math.max(0, formData.totalQuantity - borrowedCount);
+                }
+            } else {
+                // Add new equipment
+                const newItem = {
+                    id: Date.now(), // Simple ID generation
+                    ...formData,
+                    availableQuantity: formData.totalQuantity,
+                    borrowedBy: [],
+                    image: null
+                };
+                equipmentData.push(newItem);
+            }
+            
+            renderEquipment();
+            updateStats();
+            closeModal('addEquipmentModal');
+            
+            alert(currentEquipmentId ? 'Equipment updated successfully!' : 'Equipment added successfully!');
+        });
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('uploadText').textContent = 'Image uploaded successfully';
+                    document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-width: 100px; border-radius: 4px;">`;
+                    
+                    // Store image data (in real implementation, this would be uploaded to server)
+                    if (currentEquipmentId) {
+                        const item = equipmentData.find(eq => eq.id === currentEquipmentId);
+                        if (item) item.image = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Render borrowed items
+        function renderBorrowedItems() {
+            const container = document.getElementById('borrowedItemsList');
+            const borrowedItems = [];
+            
+            equipmentData.forEach(item => {
+                item.borrowedBy.forEach((borrow, index) => {
+                    borrowedItems.push({
+                        ...borrow,
+                        equipmentName: item.name,
+                        equipmentId: item.id,
+                        borrowIndex: index
+                    });
+                });
+            });
+            
+            if (borrowedItems.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #718096; font-style: italic;">No items currently borrowed.</p>';
+                return;
+            }
+            
+            container.innerHTML = borrowedItems.map(item => `
+                <div class="equipment-card" style="margin-bottom: 1rem;">
+                    <h3>${item.equipmentName}</h3>
+                    <div class="equipment-details">
+                        <div><strong>Borrowed by:</strong> ${item.staffName}</div>
+                        <div><strong>Unit:</strong> ${item.unit}</div>
+                        <div><strong>Borrow Date:</strong> ${item.borrowDate}</div>
+                        ${item.notes ? `<div><strong>Notes:</strong> ${item.notes}</div>` : ''}
+                    </div>
+                    <div class="equipment-actions" style="margin-top: 1rem;">
+                        <button class="btn btn-primary btn-small" onclick="returnEquipment(${item.equipmentId}, ${item.borrowIndex})">
+                            ↩️ Return Item
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalItems = equipmentData.reduce((sum, item) => sum + item.totalQuantity, 0);
+            const availableItems = equipmentData.reduce((sum, item) => sum + item.availableQuantity, 0);
+            const borrowedItems = totalItems - availableItems;
+            const totalBorrows = equipmentData.reduce((sum, item) => sum + item.borrowedBy.length, 0);
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('availableItems').textContent = availableItems;
+            document.getElementById('borrowedItems').textContent = borrowedItems;
+            document.getElementById('totalBorrows').textContent = totalBorrows;
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        };
+
+        // Add some sample data for demonstration
+        function addSampleBorrowData() {
+            // This function adds some borrowed items for demonstration
+            // In real implementation, this data would come from a database
+        }
+
+        // Initialize with sample borrow data
+        addSampleBorrowData();
+    </script>
+</body>
+</html>
