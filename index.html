@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -68,7 +68,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
         }
 
@@ -109,9 +109,9 @@
         }
 
         .tab.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
         }
 
         .tab-content {
@@ -146,8 +146,8 @@
 
         .search-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #48bb78;
+            box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
         }
 
         .filter-select {
@@ -177,7 +177,7 @@
         .equipment-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
+            border-color: #48bb78;
         }
 
         .equipment-image {
@@ -227,7 +227,7 @@
 
         .status-available {
             background: #c6f6d5;
-            color: #22543d;
+            color: #1a202c;
         }
 
         .status-borrowed {
@@ -309,8 +309,8 @@
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #48bb78;
+            box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
         }
 
         .file-upload {
@@ -323,8 +323,8 @@
         }
 
         .file-upload:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
+            border-color: #48bb78;
+            background: rgba(72, 187, 120, 0.05);
         }
 
         .borrowed-info {
@@ -341,7 +341,7 @@
         }
 
         .admin-panel {
-            background: linear-gradient(135deg, #4299e1, #3182ce);
+            background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
             padding: 1rem;
             border-radius: 8px;
@@ -372,6 +372,50 @@
         .stat-label {
             opacity: 0.9;
             font-size: 0.9rem;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+        }
+
+        .data-persistence-warning {
+            background: rgba(255, 243, 205, 0.95);
+            border: 2px solid #f6ad55;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            color: #744210;
+        }
+
+        .data-persistence-warning strong {
+            color: #c05621;
         }
 
         @media (max-width: 768px) {
@@ -411,6 +455,11 @@
     </header>
 
     <div class="container">
+        <!-- Data Persistence Warning -->
+        <div class="data-persistence-warning">
+            <strong>⚠️ Important Notice:</strong> This is a demo version. All changes (images, equipment updates, borrowing records) are stored locally in your browser and will be lost when the page refreshes or when accessed from different devices. For production use, this system needs to be connected to a proper database server.
+        </div>
+
         <div class="tabs">
             <div class="tab active" onclick="switchTab('catalog')">Equipment Catalog</div>
             <div class="tab" onclick="switchTab('borrowed')">Borrowed Items</div>
@@ -475,6 +524,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>🔐 Admin Login</h2>
+                <button class="btn btn-secondary" onclick="closeModal('loginModal')">✕</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="adminPassword">Enter Admin Password:</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password..." required>
+                </div>
+                <div id="loginError" style="color: #e53e3e; font-size: 0.9rem; margin-bottom: 1rem; display: none;">
+                    Incorrect password. Please try again.
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('loginModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -586,91 +658,118 @@
 
         // Initialize the system
         window.onload = function() {
+            loadDataFromStorage();
             initializeEquipmentData();
             renderEquipment();
             updateStats();
         };
 
+        // Data persistence functions
+        function saveDataToStorage() {
+            try {
+                localStorage.setItem('seatingLibraryData', JSON.stringify(equipmentData));
+            } catch (e) {
+                console.warn('Could not save to localStorage:', e);
+            }
+        }
+
+        function loadDataFromStorage() {
+            try {
+                const stored = localStorage.getItem('seatingLibraryData');
+                if (stored) {
+                    equipmentData = JSON.parse(stored);
+                    return true;
+                }
+            } catch (e) {
+                console.warn('Could not load from localStorage:', e);
+            }
+            return false;
+        }
+
         // Sample equipment data based on the catalog
         function initializeEquipmentData() {
-            equipmentData = [
-                {
-                    id: 1,
-                    name: "Ki Mobility Catalyst 4C Wheelchair",
-                    category: "wheelchairs",
-                    supplier: "SAHK",
-                    totalQuantity: 1,
-                    availableQuantity: 0,
-                    description: "Advanced manual wheelchair with customizable features",
-                    image: null,
-                    borrowedBy: [
-                        { staffName: "Mr. Kwan", unit: "Hostel A", borrowDate: "2023-08-08", notes: "For mobility assistance" }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: "Base Hilo M+",
-                    category: "stablio",
-                    supplier: "SAHK",
-                    totalQuantity: 2,
-                    availableQuantity: 1,
-                    description: "Adjustable seating base with multiple positioning options",
-                    image: null,
-                    borrowedBy: [
-                        { staffName: "Ms. Chan", unit: "OT Department", borrowDate: "2024-06-12", notes: "Assessment purposes" }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: "CONFORTABLE PLUS DUO L",
-                    category: "stablio",
-                    supplier: "SAHK",
-                    totalQuantity: 1,
-                    availableQuantity: 0,
-                    description: "Large comfort seating cushion with dual support",
-                    image: null,
-                    borrowedBy: [
-                        { staffName: "Ms. Tse", unit: "Hostel B", borrowDate: "2023-09-13", notes: "Multiple system atrophy support" }
-                    ]
-                },
-                {
-                    id: 4,
-                    name: "E-Z on Lateral Support (with Nylon)",
-                    category: "accessories",
-                    supplier: "Justice Medical",
-                    totalQuantity: 2,
-                    availableQuantity: 1,
-                    description: "Lateral support system with nylon construction",
-                    image: null,
-                    borrowedBy: [
-                        { staffName: "Ms. Cheung", unit: "Day Service Center", borrowDate: "2023-11-02", notes: "Multiple sclerosis support" }
-                    ]
-                },
-                {
-                    id: 5,
-                    name: "Wedge M",
-                    category: "stablio",
-                    supplier: "SAHK",
-                    totalQuantity: 2,
-                    availableQuantity: 1,
-                    description: "Medium-sized positioning wedge",
-                    image: null,
-                    borrowedBy: [
-                        { staffName: "Mr. Fan", unit: "Training Center", borrowDate: "2024-08-28", notes: "Cerebral palsy positioning" }
-                    ]
-                },
-                {
-                    id: 6,
-                    name: "URIAS Air Splint, Half Arm 53cm",
-                    category: "consumables",
-                    supplier: "Efficiency Medical",
-                    totalQuantity: 2,
-                    availableQuantity: 2,
-                    description: "Air splint for arm support and positioning",
-                    image: null,
-                    borrowedBy: []
-                }
-            ];
+            // Only initialize if no data was loaded from storage
+            if (equipmentData.length === 0) {
+                equipmentData = [
+                    {
+                        id: 1,
+                        name: "Ki Mobility Catalyst 4C Wheelchair",
+                        category: "wheelchairs",
+                        supplier: "SAHK",
+                        totalQuantity: 1,
+                        availableQuantity: 0,
+                        description: "Advanced manual wheelchair with customizable features",
+                        image: null,
+                        borrowedBy: [
+                            { staffName: "Mr. Kwan", unit: "Hostel A", borrowDate: "2023-08-08", notes: "For mobility assistance" }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: "Base Hilo M+",
+                        category: "stablio",
+                        supplier: "SAHK",
+                        totalQuantity: 2,
+                        availableQuantity: 1,
+                        description: "Adjustable seating base with multiple positioning options",
+                        image: null,
+                        borrowedBy: [
+                            { staffName: "Ms. Chan", unit: "OT Department", borrowDate: "2024-06-12", notes: "Assessment purposes" }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        name: "CONFORTABLE PLUS DUO L",
+                        category: "stablio",
+                        supplier: "SAHK",
+                        totalQuantity: 1,
+                        availableQuantity: 0,
+                        description: "Large comfort seating cushion with dual support",
+                        image: null,
+                        borrowedBy: [
+                            { staffName: "Ms. Tse", unit: "Hostel B", borrowDate: "2023-09-13", notes: "Multiple system atrophy support" }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        name: "E-Z on Lateral Support (with Nylon)",
+                        category: "accessories",
+                        supplier: "Justice Medical",
+                        totalQuantity: 2,
+                        availableQuantity: 1,
+                        description: "Lateral support system with nylon construction",
+                        image: null,
+                        borrowedBy: [
+                            { staffName: "Ms. Cheung", unit: "Day Service Center", borrowDate: "2023-11-02", notes: "Multiple sclerosis support" }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        name: "Wedge M",
+                        category: "stablio",
+                        supplier: "SAHK",
+                        totalQuantity: 2,
+                        availableQuantity: 1,
+                        description: "Medium-sized positioning wedge",
+                        image: null,
+                        borrowedBy: [
+                            { staffName: "Mr. Fan", unit: "Training Center", borrowDate: "2024-08-28", notes: "Cerebral palsy positioning" }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        name: "URIAS Air Splint, Half Arm 53cm",
+                        category: "consumables",
+                        supplier: "Efficiency Medical",
+                        totalQuantity: 2,
+                        availableQuantity: 2,
+                        description: "Air splint for arm support and positioning",
+                        image: null,
+                        borrowedBy: []
+                    }
+                ];
+                saveDataToStorage();
+            }
         }
 
         // Tab switching functionality
@@ -693,19 +792,86 @@
 
         // Toggle admin mode
         function toggleAdminMode() {
-            isAdminMode = !isAdminMode;
+            if (!isAdminMode) {
+                // Show login modal
+                document.getElementById('loginForm').reset();
+                document.getElementById('loginError').style.display = 'none';
+                showModal('loginModal');
+            } else {
+                // Logout from admin mode
+                exitAdminMode();
+            }
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('adminPassword').value;
+            const correctPassword = '123456';
+            
+            if (password === correctPassword) {
+                // Successful login
+                enterAdminMode();
+                closeModal('loginModal');
+            } else {
+                // Show error
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        });
+
+        // Enter admin mode
+        function enterAdminMode() {
+            isAdminMode = true;
             const adminElements = document.querySelectorAll('.admin-only');
             const toggleText = document.getElementById('adminToggleText');
             
-            if (isAdminMode) {
-                adminElements.forEach(el => el.style.display = 'block');
-                toggleText.textContent = 'Exit Admin';
-                document.getElementById('currentUser').textContent = 'Admin User';
-            } else {
-                adminElements.forEach(el => el.style.display = 'none');
-                toggleText.textContent = 'Admin Mode';
-                document.getElementById('currentUser').textContent = 'OT Staff';
-            }
+            adminElements.forEach(el => el.style.display = 'block');
+            toggleText.textContent = 'Exit Admin';
+            document.getElementById('currentUser').textContent = 'Admin User';
+            
+            // Show success message
+            showNotification('Successfully logged in as Admin', 'success');
+        }
+
+        // Exit admin mode
+        function exitAdminMode() {
+            isAdminMode = false;
+            const adminElements = document.querySelectorAll('.admin-only');
+            const toggleText = document.getElementById('adminToggleText');
+            
+            adminElements.forEach(el => el.style.display = 'none');
+            toggleText.textContent = 'Admin Mode';
+            document.getElementById('currentUser').textContent = 'OT Staff';
+            
+            // Show logout message
+            showNotification('Logged out from Admin mode', 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            // Create new notification
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
         // Filter equipment
@@ -826,7 +992,7 @@
             currentEquipmentId = id;
             const item = equipmentData.find(eq => eq.id === id);
             if (!item || item.availableQuantity === 0) {
-                alert('This equipment is not available for borrowing.');
+                showNotification('This equipment is not available for borrowing.', 'error');
                 return;
             }
             
@@ -855,12 +1021,15 @@
                 // Decrease available quantity
                 item.availableQuantity--;
                 
+                // Save to storage
+                saveDataToStorage();
+                
                 // Refresh display
                 renderEquipment();
                 updateStats();
                 closeModal('borrowModal');
                 
-                alert(`Equipment "${item.name}" has been borrowed by ${staffName}.`);
+                showNotification(`Equipment "${item.name}" has been borrowed by ${staffName}.`, 'success');
             }
         });
 
@@ -874,12 +1043,15 @@
                 // Increase available quantity
                 item.availableQuantity++;
                 
+                // Save to storage
+                saveDataToStorage();
+                
                 // Refresh displays
                 renderEquipment();
                 renderBorrowedItems();
                 updateStats();
                 
-                alert(`Equipment "${item.name}" has been returned by ${returnedItem.staffName}.`);
+                showNotification(`Equipment "${item.name}" has been returned by ${returnedItem.staffName}.`, 'success');
             }
         }
 
@@ -947,11 +1119,14 @@
                 equipmentData.push(newItem);
             }
             
+            // Save to storage
+            saveDataToStorage();
+            
             renderEquipment();
             updateStats();
             closeModal('addEquipmentModal');
             
-            alert(currentEquipmentId ? 'Equipment updated successfully!' : 'Equipment added successfully!');
+            showNotification(currentEquipmentId ? 'Equipment updated successfully!' : 'Equipment added successfully!', 'success');
         });
 
         // Handle image upload
@@ -963,15 +1138,68 @@
                     document.getElementById('uploadText').textContent = 'Image uploaded successfully';
                     document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-width: 100px; border-radius: 4px;">`;
                     
-                    // Store image data (in real implementation, this would be uploaded to server)
+                    // Store image data in current form state
+                    const imageData = e.target.result;
+                    
                     if (currentEquipmentId) {
                         const item = equipmentData.find(eq => eq.id === currentEquipmentId);
-                        if (item) item.image = e.target.result;
+                        if (item) {
+                            item.image = imageData;
+                            saveDataToStorage();
+                        }
+                    } else {
+                        // Store temporarily for new equipment
+                        window.tempImageData = imageData;
                     }
                 };
                 reader.readAsDataURL(file);
             }
         }
+
+        // Update equipment form submission to handle images for new items
+        document.getElementById('equipmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('equipmentName').value,
+                category: document.getElementById('equipmentCategory').value,
+                supplier: document.getElementById('equipmentSupplier').value,
+                totalQuantity: parseInt(document.getElementById('equipmentQuantity').value),
+                description: document.getElementById('equipmentDescription').value
+            };
+            
+            if (currentEquipmentId) {
+                // Edit existing equipment
+                const item = equipmentData.find(eq => eq.id === currentEquipmentId);
+                if (item) {
+                    Object.assign(item, formData);
+                    // Adjust available quantity if total quantity changed
+                    const borrowedCount = item.borrowedBy.length;
+                    item.availableQuantity = Math.max(0, formData.totalQuantity - borrowedCount);
+                }
+            } else {
+                // Add new equipment
+                const newItem = {
+                    id: Date.now(),
+                    ...formData,
+                    availableQuantity: formData.totalQuantity,
+                    borrowedBy: [],
+                    image: window.tempImageData || null
+                };
+                equipmentData.push(newItem);
+                // Clear temp image data
+                delete window.tempImageData;
+            }
+            
+            // Save to storage
+            saveDataToStorage();
+            
+            renderEquipment();
+            updateStats();
+            closeModal('addEquipmentModal');
+            
+            showNotification(currentEquipmentId ? 'Equipment updated successfully!' : 'Equipment added successfully!', 'success');
+        });
 
         // Render borrowed items
         function renderBorrowedItems() {
@@ -1040,15 +1268,6 @@
                 event.target.classList.remove('show');
             }
         };
-
-        // Add some sample data for demonstration
-        function addSampleBorrowData() {
-            // This function adds some borrowed items for demonstration
-            // In real implementation, this data would come from a database
-        }
-
-        // Initialize with sample borrow data
-        addSampleBorrowData();
     </script>
 </body>
 </html>
